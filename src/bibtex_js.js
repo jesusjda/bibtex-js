@@ -1052,7 +1052,9 @@ function loadExtras() {
     $(".bibtex_author").each(function(i, obj) {
         authorList($(this));
     });
-
+    $(".bibtex_labels").each(function(i, obj) {
+        labelList($(this));
+    });
     localStorage.removeItem("customerDatabase");
 
     if (!localStorage.searcher) {
@@ -1105,6 +1107,22 @@ function combineSearcher(searcherClass, needToRestart) {
         }
     });
     searcherClass.searcher(string, needToRestart);
+}
+
+function labelsList(object) {
+    var arrayString=[];
+    $("span.labels").each(function(i, obj) {
+      arrayString.push($(this).text().split(","));
+    });
+    console.log(arrayString);
+    var tuples = [];
+    for (var key in arrayString) tuples.push(arrayString[key].toLowerCase());
+
+    for (var i = 0; i < tuples.length; i++) {
+        var key = tuples[i];
+        var text = key;
+        object.append($("<option></option>").attr("value", key).text(text));
+    }
 }
 
 function authorList(object) {
