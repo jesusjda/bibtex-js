@@ -645,7 +645,7 @@ function BibtexDisplay() {
     }
 
     this.createStructure = function(structure, output, entries, level) {
-        var MissingGroup = "Other Publications";
+        var MissingGroup = "OTHER";
         //Used during the search
         level = level || 0;
 
@@ -685,7 +685,7 @@ function BibtexDisplay() {
                 //Add the header for the group
                 var header = newStruct.children("." + groupName.toLowerCase()).first().find(".title");
                 if (header.length) {
-                    header.prepend(this.fixValue(groupNameValue));
+                    header.prepend("<h"+(level+0)+" class='"+groupName+"'>"+this.fixValue(groupNameValue)+"</h"+(level +1)+">");
                 } else {
                     newStruct.children("." + groupName.toLowerCase()).first().prepend("<h" + (level + 1) + " class='" +
                         groupName + "' id=\"" + groupNameValue + "\">" + this.fixValue(groupNameValue) + "</h" + (level + 1) + ">");
@@ -1115,9 +1115,14 @@ function labelList(object) {
       arrayString.push($(this).text().split(","));
     });
     var tuples = [];
-    for (var i in arrayString)
-      for (var key in arrayString[i])
-        tuples.push(arrayString[i][key]);
+    for (var i in arrayString){
+      for (var key in arrayString[i]){
+	v = arrayString[i][key].toLowerCase()
+	if (tuples.indexOf(v) == -1){
+          tuples.push(v);
+	}
+      }
+    }
 
     for (var i = 0; i < tuples.length; i++) {
         var key = tuples[i];
@@ -1129,7 +1134,7 @@ function labelList(object) {
 function authorList(object) {
     var map = new Object();
     $("span.author").each(function(i, obj) {
-        arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
+        arrayString = $(this).text().split("and"));
         if (object.attr("extra") == "first") {
             map[arrayString[0]] = 1;
         } else {
